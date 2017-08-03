@@ -2,7 +2,9 @@
 
 This adds a new field with a type `ajaxmultictselect` that can be used to improve backend load times and allow searching and selection across multiple contenttypes. 
 
-When a site has thousands of pieces of content and pages for example have a large number of select fields, a normal select field would populate the drop down on load. This in turn will query the database and produce a `select` field with thousands of `<option>`s populated with your content. 
+The add/edit page for a contenttype with multiple select field can load slowly in instances where a site has thousands of pieces of content. A normal select field would populate the drop down on load. This in turn will query the database and produce a `select` field with thousands of `<option>`s populated with your content. 
+
+This field does **not** populate on load, but will populate with relevant content based on your search term. Improving load times and potentially the user experience. 
 
 To add the field install this extension on your Bolt install and then modify your `contenttypes.yml` file to add a new field, something like this:
 
