@@ -5,7 +5,9 @@
     "keywords": [
         "select field",
         "multiple select",
-        "ajax select"
+        "ajax select",
+        "select",
+        "ajax"
     ],
     "require": {
         "bolt/bolt": "^3.0"
