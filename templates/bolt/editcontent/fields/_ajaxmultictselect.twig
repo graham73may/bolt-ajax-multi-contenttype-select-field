@@ -1,0 +1,92 @@
+{#=== OPTIONS ========================================================================================================#}
+
+{% set option = {
+info:      field.info|default(''),
+label:     field.label,
+multiple:  (field.multiple is defined and field.multiple),
+sortable:  (field.sortable is defined and field.sortable),
+required:  field.required|default(false),
+values:    field.values|default([]),
+default:   field.default|default(null),
+} %}
+
+{#=== INIT ===========================================================================================================#}
+
+{# Get the current selection. Either a single value, or an array. #}
+{% set db_selection = context.content.get(contentkey)|default(option.default) %}
+{% if db_selection is not iterable %}
+    {% set db_selection = [ db_selection ] %}
+{% endif %}
+
+{% set selection = {} %}
+
+{% for i,selected in db_selection %}
+    {% if selected is not empty %}
+        {% setcontent value = selected nohydrate %}
+
+        {% if value is not empty %}
+            {% set selection = selection|merge({(value.id): value}) %}
+        {% endif %}
+    {% endif %}
+{% endfor %}
+
+{# Build the select options array #}
+{% set options = [] %}
+{% if selection is not empty %}
+    {% set lookuptype = option.values|split('/')|slice(0,1)|first %}
+    {% set lookupfield = option.values|split('/')|slice(1,1)|first %}
+
+    {% if ',' in lookupfield %}
+        {% set lookupfieldlist = lookupfield|split(',') %}
+    {% endif %}
+
+    {% set valuefield = lookupfieldlist|default(lookupfield)|default('id') %}
+    {% set selection = selection|ajaxmultictselectfield(valuefield, option.multiple, field.keys|default('id'), lookuptype) %}
+
+    {% for selected in selection %}
+        {% set options = options|merge([selected|merge({selected: true, value: selected.id})]) %}
+    {% endfor %}
+{% endif %}
+
+{# BUIC options #}
+{% set buic_opt_select = {
+'all':       option.multiple,
+'clear':     true,
+'id':        key,
+'multiple':  option.multiple,
+'name':      option.multiple ? name ~ '[]' : name,
+'options':   options,
+'required':  option.required,
+'class' : 'js-ajax-multi-ct-select ' ~ (field.sortable ? 'js-ajax-multi-ct-select--sortable') ~ ' '
+} %}
+
+{#=== FIELDSET =======================================================================================================#}
+
+{% extends '@bolt/_base/_fieldset.twig' %}
+
+{% block fieldset_type 'select' %}
+{% block fieldset_widget 'fieldSelect' %}
+
+{% set fieldset_conf = {
+autocomplete: field.autocomplete|default(false),
+sortable: field.sortable|default(false)
+} %}
+
+{% block fieldset_label_text  labelkey %}
+{% block fieldset_label_info  option.info %}
+{% block fieldset_label_class 'col-sm-3' %}
+{% block fieldset_label_for   key %}
+
+{% block fieldset_controls %}
+    {% from '@bolt/_buic/_select.twig' import buic_select %}
+
+    {% set data_field = {
+    'id': _key,
+    'name': key,
+    'field': field
+    } %}
+
+    <div class="col-sm-9{{ option.sortable ? ' sortable-select2-container' }} js-ajax-multi-ct-select-container" data-field="{{ data_field|json_encode }}">
+        {{ buic_select(buic_opt_select) }}
+    </div>
+{% endblock fieldset_controls %}
