@@ -2,7 +2,7 @@
 
 This adds a new field with a type `ajaxmultictselect` that can be used to improve backend load times and allow searching and selection across multiple contenttypes. 
 
-The add/edit page for a contenttype with multiple select field can load slowly in instances where a site has thousands of pieces of content. A normal select field would populate the drop down on load. This in turn will query the database and produce a `select` field with thousands of `<option>`s populated with your content. 
+The add/edit page for a contenttype with multiple select fields can load slowly in instances where a site has thousands of pieces of content. A normal select field would populate the drop down on load. This in turn will query the database and produce a `select` field with thousands of `<option>`s populated with your content. 
 
 This field does **not** populate on load, but will populate with relevant content based on your search term. Improving load times and potentially the user experience. 
 
