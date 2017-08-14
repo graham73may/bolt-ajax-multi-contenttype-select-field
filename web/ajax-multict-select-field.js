@@ -46,7 +46,7 @@
                         }
                     },
                     placeholder             : options.placeholder,
-                    allowClear              : options.allowClear,
+                    allowClear              : options.allowClear || true,
                     minimumResultsForSearch : options.minimumResultsForSearch,
                     width                   : options.width,
                     ajax                    : {
