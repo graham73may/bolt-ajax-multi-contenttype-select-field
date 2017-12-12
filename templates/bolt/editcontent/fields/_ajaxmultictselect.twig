@@ -85,7 +85,10 @@ sortable: field.sortable|default(false)
     'name': key,
     'field': field
     } %}
-
+    
+    {# This ensures that an empty value is always submitted #}
+    <input type="hidden" name="{{ buic_opt_select.name }}">
+    
     <div class="col-sm-9{{ option.sortable ? ' sortable-select2-container' }} js-ajax-multi-ct-select-container" data-field="{{ data_field|json_encode }}">
         {{ buic_select(buic_opt_select) }}
     </div>
