@@ -59,7 +59,7 @@
                         delay          : 500,
                         type           : 'POST',
                         data           : function (params) {
-                            var $container = $(this).closest('.js-ajax-multi-ct-select-container');
+                            var $container = $select.closest('.js-ajax-multi-ct-select-container');
 
                             return {
                                 q     : params.term, // search term
