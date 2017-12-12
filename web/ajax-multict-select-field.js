@@ -50,6 +50,7 @@
                     minimumResultsForSearch : options.minimumResultsForSearch,
                     width                   : options.width,
                     ajax                    : {
+                        select         : $select,
                         url            : function (params) {
                             var page = params.page || 1;
 
