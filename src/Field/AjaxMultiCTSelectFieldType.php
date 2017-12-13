@@ -25,11 +25,8 @@ class AjaxMultiCTSelectFieldType extends FieldTypeBase
 
     public function getStorageType()
     {
-        if (
-            (isset($this->mapping['data']['multiple']) && ($this->mapping['data']['multiple']))
-            ||
-            (isset($this->mapping['multiple']) && ($this->mapping['multiple']))
-        ) {
+
+        if ((isset($this->mapping['data']['multiple']) && ($this->mapping['data']['multiple'])) || (isset($this->mapping['multiple']) && ($this->mapping['multiple']))) {
             return Type::getType('json_array');
         }
 
@@ -42,60 +39,5 @@ class AjaxMultiCTSelectFieldType extends FieldTypeBase
         return [
             'default' => ''
         ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function persist(QuerySet $queries, $entity)
-    {
-
-        $attribute = $this->getMappingAttribute();
-        $key       = $this->mapping['fieldname'];
-
-        $qb          = &$queries[0];
-        $valueMethod = 'serialize' . ucfirst($this->camelize($attribute));
-        $value       = $entity->$valueMethod();
-
-        if ($this instanceof SanitiserAwareInterface && is_string($value)) {
-            $isWysiwyg = $this instanceof WysiwygAwareInterface;
-            $value     = $this->getSanitiser()
-                              ->sanitise($value, $isWysiwyg);
-        }
-
-        $type = $this->getStorageType();
-
-        if ($value !== null) {
-            if (is_array($value)) {
-                $value = implode(',', $value);
-            }
-
-            $value = $type->convertToDatabaseValue($value, $this->getPlatform());
-        } elseif (isset($this->mapping['default'])) {
-            $value = $this->mapping['default'];
-        }
-        $qb->setValue($key, ':' . $key);
-        $qb->set($key, ':' . $key);
-        $qb->setParameter($key, $value);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function hydrate($data, $entity)
-    {
-
-        $key  = $this->mapping['fieldname'];
-        $type = $this->getStorageType();
-        $val  = isset($data[$key]) ? $data[$key] : null;
-
-        if ($val !== null) {
-            if (strpos($val, ',') !== false) {
-                $val = explode(',', $val);
-            }
-
-            $value = $type->convertToPHPValue($val, $this->getPlatform());
-            $this->set($entity, $value);
-        }
     }
 }
