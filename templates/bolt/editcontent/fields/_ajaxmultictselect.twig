@@ -1,13 +1,13 @@
 {#=== OPTIONS ========================================================================================================#}
 
 {% set option = {
-info:      field.info|default(''),
-label:     field.label,
-multiple:  (field.multiple is defined and field.multiple),
-sortable:  (field.sortable is defined and field.sortable),
-required:  field.required|default(false),
-values:    field.values|default([]),
-default:   field.default|default(null),
+    info:      field.info|default(''),
+    label:     field.label,
+    multiple:  (field.multiple is defined and field.multiple),
+    sortable:  (field.sortable is defined and field.sortable),
+    required:  field.required|default(false),
+    values:    field.values|default([]),
+    default:   field.default|default(null),
 } %}
 
 {#=== INIT ===========================================================================================================#}
@@ -50,14 +50,14 @@ default:   field.default|default(null),
 
 {# BUIC options #}
 {% set buic_opt_select = {
-'all':       option.multiple,
-'clear':     true,
-'id':        key,
-'multiple':  option.multiple,
-'name':      option.multiple ? name ~ '[]' : name,
-'options':   options,
-'required':  option.required,
-'class' : 'js-ajax-multi-ct-select ' ~ (field.sortable ? 'js-ajax-multi-ct-select--sortable') ~ ' '
+    'all':       option.multiple,
+    'clear':     true,
+    'id':        key,
+    'multiple':  option.multiple,
+    'name':      option.multiple ? name ~ '[]' : name,
+    'options':   options,
+    'required':  option.required,
+    'class' : 'js-ajax-multi-ct-select ' ~ (field.sortable ? 'js-ajax-multi-ct-select--sortable') ~ ' '
 } %}
 
 {#=== FIELDSET =======================================================================================================#}
@@ -68,8 +68,8 @@ default:   field.default|default(null),
 {% block fieldset_widget 'fieldSelect' %}
 
 {% set fieldset_conf = {
-autocomplete: field.autocomplete|default(false),
-sortable: field.sortable|default(false)
+    autocomplete: field.autocomplete|default(false),
+    sortable: field.sortable|default(false)
 } %}
 
 {% block fieldset_label_text  labelkey %}
@@ -81,15 +81,16 @@ sortable: field.sortable|default(false)
     {% from '@bolt/_buic/_select.twig' import buic_select %}
 
     {% set data_field = {
-    'id': _key,
-    'name': key,
-    'field': field
+        'id': _key,
+        'name': key,
+        'field': field
     } %}
-    
+
     {# This ensures that an empty value is always submitted #}
     <input type="hidden" name="{{ buic_opt_select.name }}">
-    
-    <div class="col-sm-9{{ option.sortable ? ' sortable-select2-container' }} js-ajax-multi-ct-select-container" data-field="{{ data_field|json_encode }}">
+
+    <div class="col-sm-9{{ option.sortable ? ' sortable-select2-container' }} js-ajax-multi-ct-select-container" data-field="{{ data_field|json_encode }}" data-branding-path="{{ config.get
+        ('general/branding/path')|default('/bolt') }}">
         {{ buic_select(buic_opt_select) }}
     </div>
 {% endblock fieldset_controls %}
