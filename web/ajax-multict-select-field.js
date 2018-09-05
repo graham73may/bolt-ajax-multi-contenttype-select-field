@@ -4,17 +4,17 @@
     $.fn.extend({
         customSelect2Sortable : function () {
             var $select = $(this);
-            var ul      = $select.next('.select2-container').first('ul.select2-selection__rendered');
+            var $ul     = $select.next('.select2-container').find('ul.select2-selection__rendered').first();
 
-            ul.sortable({
+            $ul.sortable({
                 items     : 'li:not(.select2-search)',
                 tolerance : 'pointer',
                 stop      : function () {
-                    $($(ul).find('.select2-selection__choice').get().reverse()).each(function () {
+                    $($ul.find('.select2-selection__choice').get().reverse()).each(function () {
                         var id     = $(this).data('data').id;
-                        var option = $(this).find('option[value="' + id + '"]')[0];
+                        var option = $select.find('option[value="' + id + '"]')[0];
 
-                        $(this).prepend(option);
+                        $select.prepend(option);
                     });
                 }
             });
